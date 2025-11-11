@@ -1,0 +1,77 @@
+# Análisis FIRST y FOLLOW
+
+## FIRST Rules
+
+- **FIRST(S)** = { bof }
+- **FIRST(PROGRAMA)** = { int, float, void, ε }
+- **FIRST(LISTADECL)** = { int, float, void, ε }
+- **FIRST(DECL)** = { int, float, void }
+- **FIRST(DECL')** = { id }
+- **FIRST(DECL'')** = { coma, puntoycoma, lparen }
+- **FIRST(DECL''')** = { int, float, void, rparen }
+- **FIRST(LISTAID)** = { id }
+- **FIRST(LISTAID')** = { coma, ε }
+- **FIRST(TIPO)** = { int, float, void }
+- **FIRST(PARAMETROS)** = { int, float, void, ε }
+- **FIRST(PARAMLISTA)** = { int, float, void }
+- **FIRST(PARAMLISTA')** = { coma, ε }
+- **FIRST(PARAM)** = { int, float, void }
+- **FIRST(BLOQUE)** = { lbrace }
+- **FIRST(LISTASENTENCIAS)** = { id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace, ε }
+- **FIRST(SENTENCIA)** = { id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace }
+- **FIRST(SENTENCIAEXPR)** = { id, lparen, num, op_not, puntoycoma }
+- **FIRST(ASIGNACION)** = { id, lparen, num, op_not }
+- **FIRST(SENTENCIASEL)** = { if }
+- **FIRST(SENTENCIASEL')** = { else, ε }
+- **FIRST(SENTENCIAITER)** = { while, for }
+- **FIRST(SENTENCIARET)** = { return }
+- **FIRST(SENTENCIAPRINT)** = { print }
+- **FIRST(EXPR)** = { lparen, num, op_not, id }
+- **FIRST(EXPR')** = { op_or, ε }
+- **FIRST(EXPRAND)** = { lparen, num, op_not, id }
+- **FIRST(EXPRAND')** = { op_and, ε }
+- **FIRST(EXPREQ)** = { lparen, num, op_not, id }
+- **FIRST(EXPREQ')** = { op_eq, op_neq, ε }
+- **FIRST(EXPRREL)** = { lparen, num, op_not, id }
+- **FIRST(EXPRREL')** = { op_lt, op_gt, op_le, op_ge, ε }
+- **FIRST(EXPRADIT)** = { lparen, num, op_not, id }
+- **FIRST(EXPRADIT')** = { op_suma, op_resta, ε }
+- **FIRST(TERM)** = { lparen, num, op_not, id }
+- **FIRST(TERM')** = { op_mul, op_div, op_mod, ε }
+- **FIRST(FACTOR)** = { lparen, num, op_not, id }
+- **FIRST(FACTOR')** = { lparen, ε }
+- **FIRST(ARGLIST)** = { lparen, num, op_not, id }
+- **FIRST(ARGLIST')** = { coma, ε }
+
+## FOLLOW Rules
+
+- **FOLLOW(S)** = { }
+- **FOLLOW(PROGRAMA)** = { eof }
+- **FOLLOW(LISTADECL)** = { eof }
+- **FOLLOW(DECL)** = { int, float, void, eof }
+- **FOLLOW(DECL')** = { int, float, void, eof }
+- **FOLLOW(DECL'')** = { int, float, void, eof }
+- **FOLLOW(DECL''')** = { int, float, void, eof }
+- **FOLLOW(LISTAID)** = { puntoycoma }
+- **FOLLOW(LISTAID')** = { puntoycoma }
+- **FOLLOW(TIPO)** = { id }
+- **FOLLOW(PARAMETROS)** = { rparen }
+- **FOLLOW(PARAMLISTA)** = { rparen }
+- **FOLLOW(PARAM)** = { coma, rparen }
+- **FOLLOW(BLOQUE)** = { if, while, for, return, print, id, lbrace, rbrace, puntoycoma, eof }
+- **FOLLOW(EXPR)** = { rparen, puntoycoma, coma }
+- **FOLLOW(EXPR')** = { rparen, puntoycoma, coma }
+- **FOLLOW(EXPRAND)** = { op_or, rparen, puntoycoma, coma }
+- **FOLLOW(EXPRAND')** = { op_or, rparen, puntoycoma, coma }
+- **FOLLOW(EXPREQ)** = { op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(EXPREQ')** = { op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(EXPRREL)** = { op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(EXPRREL')** = { op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(EXPRADIT)** = { op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(EXPRADIT')** = { op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(TERM)** = { op_suma, op_resta, op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(TERM')** = { op_suma, op_resta, op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(FACTOR)** = { op_mul, op_div, op_mod, op_suma, op_resta, op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(FACTOR')** = { op_mul, op_div, op_mod, op_suma, op_resta, op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
+- **FOLLOW(ARGLIST)** = { coma, rparen, puntoycoma }
+- **FOLLOW(ARGLIST')** = { rparen }

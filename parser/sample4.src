@@ -1,0 +1,15 @@
+// CASO DE FALLA 2: Paréntesis sin cerrar
+// Error sintáctico: falta cerrar el paréntesis después de la condición del if
+
+int suma(int a, int b) {
+    return a + b;
+}
+
+void main() {
+    int x = 5;
+    int y = 10;
+    
+    if (x < y {
+        print(suma(x, y));
+    }
+}

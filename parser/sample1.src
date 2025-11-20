@@ -1,0 +1,16 @@
+// CASO DE ÉXITO 1: Programa con recursión
+// Calcula el factorial de un número usando recursión
+
+int factorial(int n) {
+    if (n <= 1) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+void main() {
+    int num = 5;
+    int resultado = factorial(num);
+    print(resultado);
+}

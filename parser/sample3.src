@@ -1,0 +1,8 @@
+// CASO DE FALLA 1: Falta punto y coma
+// Error sintáctico: la declaración de x no termina con punto y coma
+
+void main() {
+    int x = 10
+    int y = 20;
+    print(x + y);
+}

@@ -1,0 +1,46 @@
+// CASO DE ÉXITO 2: Programa completo con múltiples características
+// Incluye: funciones, bucles, operadores lógicos, expresiones complejas
+
+float calcular_promedio(int a, int b, int c) {
+    float suma = a + b + c;
+    float promedio = suma / 3.0;
+    return promedio;
+}
+
+void main() {
+    int x = 10;
+    int y = 20;
+    int z = 30;
+    
+    /* Declaración de variables */
+    float prom;
+    int contador = 0;
+    
+    // Bucle while con expresiones complejas
+    while (contador < 10 && x != 0) {
+        contador = contador + 1;
+        x = x - 1;
+        
+        if (contador >= 5 || y > 15) {
+            print(contador);
+        }
+    }
+    
+    // Bucle for
+    for (contador = 0; contador < 5; contador = contador + 1) {
+        if (contador % 2 == 0) {
+            print(contador);
+        } else {
+            y = y + contador;
+        }
+    }
+    
+    // Llamada a función
+    prom = calcular_promedio(x, y, z);
+    print(prom);
+    
+    // Expresiones con operadores lógicos y relacionales
+    if ((x >= 0 && y <= 100) || z != 0) {
+        print(x + y * z - 10);
+    }
+}

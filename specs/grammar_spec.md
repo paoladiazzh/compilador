@@ -31,11 +31,16 @@
 **LISTASENTENCIAS** → **SENTENCIA** **LISTASENTENCIAS** | ε
 
 **SENTENCIA** → **SENTENCIAEXPR**
- | **SENTENCIASEL**
- | **SENTENCIAITER**
- | **SENTENCIARET**
- | **SENTENCIAPRINT**
- | **BLOQUE**
+| **SENTENCIASEL**
+| **SENTENCIAITER**
+| **SENTENCIARET**
+| **SENTENCIAPRINT**
+| **BLOQUE**
+| **DECLLOCAL**
+
+**DECLLOCAL** → **TIPO** ``id`` **DECLLOCAL'** ``puntoycoma``
+**DECLLOCAL'** → ``asignacion`` **EXPR** **DECLLOCAL''** | **DECLLOCAL''**
+**DECLLOCAL''** → ``coma`` ``id`` **DECLLOCAL'** | ε
 
 **SENTENCIAEXPR** → **ASIGNACION** ``puntoycoma`` | ``puntoycoma``
 

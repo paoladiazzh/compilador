@@ -9,7 +9,6 @@
 - **FIRST(DECL')** = { id }
 - **FIRST(DECL'')** = { coma, puntoycoma, lparen }
 - **FIRST(DECL''')** = { int, float, void, rparen }
-- **FIRST(LISTAID)** = { id }
 - **FIRST(LISTAID')** = { coma, ε }
 - **FIRST(TIPO)** = { int, float, void }
 - **FIRST(PARAMETROS)** = { int, float, void, ε }
@@ -17,10 +16,12 @@
 - **FIRST(PARAMLISTA')** = { coma, ε }
 - **FIRST(PARAM)** = { int, float, void }
 - **FIRST(BLOQUE)** = { lbrace }
-- **FIRST(LISTASENTENCIAS)** = { id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace, ε }
-- **FIRST(SENTENCIA)** = { id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace }
+- **FIRST(LISTASENTENCIAS)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace, ε }
+- **FIRST(SENTENCIA)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace }
+- **FIRST(DECLLOCAL)** = { int, float, void }
+- **FIRST(DECLLOCAL')** = { asignacion, coma, ε }
+- **FIRST(DECLLOCAL'')** = { coma, ε }
 - **FIRST(SENTENCIAEXPR)** = { id, lparen, num, op_not, puntoycoma }
-- **FIRST(ASIGNACION)** = { id, lparen, num, op_not }
 - **FIRST(SENTENCIASEL)** = { if }
 - **FIRST(SENTENCIASEL')** = { else, ε }
 - **FIRST(SENTENCIAITER)** = { while, for }
@@ -39,7 +40,7 @@
 - **FIRST(TERM)** = { lparen, num, op_not, id }
 - **FIRST(TERM')** = { op_mul, op_div, op_mod, ε }
 - **FIRST(FACTOR)** = { lparen, num, op_not, id }
-- **FIRST(FACTOR')** = { lparen, ε }
+- **FIRST(FACTOR')** = { asignacion, lparen, ε }
 - **FIRST(ARGLIST)** = { lparen, num, op_not, id }
 - **FIRST(ARGLIST')** = { coma, ε }
 
@@ -52,13 +53,24 @@
 - **FOLLOW(DECL')** = { int, float, void, eof }
 - **FOLLOW(DECL'')** = { int, float, void, eof }
 - **FOLLOW(DECL''')** = { int, float, void, eof }
-- **FOLLOW(LISTAID)** = { puntoycoma }
 - **FOLLOW(LISTAID')** = { puntoycoma }
 - **FOLLOW(TIPO)** = { id }
 - **FOLLOW(PARAMETROS)** = { rparen }
 - **FOLLOW(PARAMLISTA)** = { rparen }
+- **FOLLOW(PARAMLISTA')** = { rparen }
 - **FOLLOW(PARAM)** = { coma, rparen }
-- **FOLLOW(BLOQUE)** = { if, while, for, return, print, id, lbrace, rbrace, puntoycoma, eof }
+- **FOLLOW(BLOQUE)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, else, while, for, return, print, lbrace, rbrace, eof }
+- **FOLLOW(LISTASENTENCIAS)** = { rbrace }
+- **FOLLOW(SENTENCIA)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, else, while, for, return, print, lbrace, rbrace }
+- **FOLLOW(DECLLOCAL)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace, rbrace }
+- **FOLLOW(DECLLOCAL')** = { puntoycoma }
+- **FOLLOW(DECLLOCAL'')** = { puntoycoma }
+- **FOLLOW(SENTENCIAEXPR)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace, rbrace }
+- **FOLLOW(SENTENCIASEL)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, else, while, for, return, print, lbrace, rbrace }
+- **FOLLOW(SENTENCIASEL')** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, else, while, for, return, print, lbrace, rbrace }
+- **FOLLOW(SENTENCIAITER)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, else, while, for, return, print, lbrace, rbrace }
+- **FOLLOW(SENTENCIARET)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace, rbrace }
+- **FOLLOW(SENTENCIAPRINT)** = { int, float, void, id, lparen, num, op_not, puntoycoma, if, while, for, return, print, lbrace, rbrace }
 - **FOLLOW(EXPR)** = { rparen, puntoycoma, coma }
 - **FOLLOW(EXPR')** = { rparen, puntoycoma, coma }
 - **FOLLOW(EXPRAND)** = { op_or, rparen, puntoycoma, coma }
@@ -73,5 +85,5 @@
 - **FOLLOW(TERM')** = { op_suma, op_resta, op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
 - **FOLLOW(FACTOR)** = { op_mul, op_div, op_mod, op_suma, op_resta, op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
 - **FOLLOW(FACTOR')** = { op_mul, op_div, op_mod, op_suma, op_resta, op_lt, op_gt, op_le, op_ge, op_eq, op_neq, op_and, op_or, rparen, puntoycoma, coma }
-- **FOLLOW(ARGLIST)** = { coma, rparen, puntoycoma }
+- **FOLLOW(ARGLIST)** = { rparen }
 - **FOLLOW(ARGLIST')** = { rparen }

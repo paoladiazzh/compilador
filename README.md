@@ -14,13 +14,12 @@
 **Ver documentación completa:** [lexer/README.md](lexer/README.md)
 
 ### 2. **Analizador Sintáctico (Parser)**
-- Ubicación: `parser_example/`
+- Ubicación: `parser/`
 - Implementación de análisis sintáctico descendente recursivo
 - Valida la estructura gramatical de expresiones
 - Soporta operadores aritméticos, identificadores, números y delimitadores
-> **Nota:** Este es un ejemplo de parser demostrativo. El parser completo del compilador aún no ha sido implementado.
 
-**Ver documentación completa:** [parser_example/README.md](parser_example/README.md)
+**Ver documentación completa:** [parser/README.md](parser/README.md)
 
 ### 3. **Especificaciones del Lenguaje**
 - Ubicación: `specs/`

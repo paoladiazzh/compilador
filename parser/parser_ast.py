@@ -215,7 +215,7 @@ class ParserAST:
             return None
         else:
             # Verificar que no sea solo un punto y coma vacío
-            if self.current_type() in ["LPAREN", "NUM", "OP_NOT", "ID"]:
+            if self.current_type() in ["LPAREN", "NUM", "OP_NOT", "ID", "OP_RESTA"]:
                 expr = self.expr()
                 self.expect("PUNTOYCOMA")
                 return ExprStmtNode(expr)
@@ -277,7 +277,7 @@ class ParserAST:
         """SENTENCIARET → return EXPR;"""
         self.expect("RETURN")
         # Manejar expresiones en el return
-        if self.current_type() in ["LPAREN", "NUM", "OP_NOT", "ID"]:
+        if self.current_type() in ["LPAREN", "NUM", "OP_NOT", "ID", "OP_RESTA"]:
             expr = self.expr()
         else:
             # Return sin expresión (para funciones void)
@@ -357,7 +357,7 @@ class ParserAST:
         return left
     
     def factor(self):
-        """FACTOR → (EXPR) | num | !FACTOR | id (= EXPR | (ARGS) | ε)"""
+        """FACTOR → (EXPR) | num | !FACTOR | -FACTOR | id (= EXPR | (ARGS) | ε)"""
         token = self.current_type()
         
         if token == "LPAREN":
@@ -366,6 +366,7 @@ class ParserAST:
             self.expect("RPAREN")
             return expr
         elif token == "NUM":
+            # CORRECCIÓN CRÍTICA: Capturar el valor antes de advance()
             value = self.current_value()
             self.advance()
             return NumNode(value)
@@ -373,6 +374,11 @@ class ParserAST:
             self.advance()
             expr = self.factor()
             return UnaryOpNode("!", expr)
+        elif token == "OP_RESTA":
+            # Manejar el menos unario
+            self.advance()
+            expr = self.factor()
+            return UnaryOpNode("-", expr)
         elif token == "ID":
             var_name = self.current_value()
             self.advance()
@@ -385,14 +391,14 @@ class ParserAST:
             elif self.current_type() == "LPAREN":
                 self.advance()
                 args = []
-                if self.current_type() in ["LPAREN", "NUM", "OP_NOT", "ID"]:
+                if self.current_type() in ["LPAREN", "NUM", "OP_NOT", "ID", "OP_RESTA"]:
                     args = self.arglist()
                 self.expect("RPAREN")
                 return FuncCallNode(var_name, args)
             else:
                 return VarNode(var_name)
         else:
-            raise ParseError(f"Se esperaba LPAREN, NUM, OP_NOT o ID, se encontró {token}")
+            raise ParseError(f"Se esperaba LPAREN, NUM, OP_NOT, OP_RESTA o ID, se encontró {token}")
     
     def arglist(self):
         """ARGLIST → EXPR (, EXPR)*"""

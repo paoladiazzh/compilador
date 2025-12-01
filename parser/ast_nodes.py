@@ -177,16 +177,24 @@ class NumNode(ASTNode):
     """Número literal: 42, 3.14"""
     def __init__(self, value):
         super().__init__()
-        self.value = value
-        # Determinar tipo
-        if '.' in str(value):
+        self.value = str(value)  
+        
+        if '.' in self.value:
             self.expr_type = 'float'
         else:
             self.expr_type = 'int'
-        self.is_dummy = False  # Flag para expresiones dummy
+        
+        self.is_dummy = False 
     
     def __repr__(self):
         return f"Num({self.value})"
+    
+    def get_numeric_value(self):
+        """Convierte el valor a número (int o float) según corresponda"""
+        if self.expr_type == 'float':
+            return float(self.value)
+        else:
+            return int(self.value)
 
 class EmptyExprNode(ASTNode):
     """Expresión vacía (para for loops vacíos, etc.)"""

@@ -10,8 +10,8 @@ import os
 # Añadir directorios al path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(current_dir, 'lexer'))
-sys.path.insert(0, os.path.join(current_dir, 'semantic'))
 sys.path.insert(0, os.path.join(current_dir, 'parser'))
+sys.path.insert(0, os.path.join(current_dir, 'semantic'))
 
 from lexer import Lexer, LexerError
 from parser_ast import ParserAST

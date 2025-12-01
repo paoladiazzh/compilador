@@ -200,7 +200,7 @@ class SemanticAnalyzer:
         """Visita un if"""
         # Validar que la condición sea una expresión válida
         cond_type = self.visit_expr(node.condition)
-        if cond_type not in ['int', 'float', 'bool']:
+        if cond_type not in ['int', 'float', 'bool', 'unknown']:
             self.add_error(f"La condición del 'if' debe ser una expresión booleana o numérica, se encontró '{cond_type}'")
         
         self.visit_statement(node.then_stmt)
@@ -211,7 +211,7 @@ class SemanticAnalyzer:
         """Visita un while"""
         # Validar que la condición sea una expresión válida
         cond_type = self.visit_expr(node.condition)
-        if cond_type not in ['int', 'float', 'bool']:
+        if cond_type not in ['int', 'float', 'bool', 'unknown']:
             self.add_error(f"La condición del 'while' debe ser una expresión booleana o numérica, se encontró '{cond_type}'")
         
         self.visit_statement(node.body)
@@ -234,7 +234,11 @@ class SemanticAnalyzer:
     
     def visit_return(self, node):
         """Visita un return"""
-        expr_type = self.visit_expr(node.expr)
+        # CORRECCIÓN: Manejar correctamente EmptyExprNode
+        if isinstance(node.expr, EmptyExprNode):
+            expr_type = 'void'
+        else:
+            expr_type = self.visit_expr(node.expr)
         
         # Validar que el tipo de retorno coincida con la función
         if self.current_function_return_type:
@@ -252,6 +256,8 @@ class SemanticAnalyzer:
             return 'void'
         elif isinstance(node, EmptyExprNode):
             return 'void'
+        elif isinstance(node, NumNode):
+            return node.expr_type
         elif isinstance(node, BinaryOpNode):
             return self.visit_binary_op(node)
         elif isinstance(node, UnaryOpNode):
@@ -260,8 +266,6 @@ class SemanticAnalyzer:
             return self.visit_assign(node)
         elif isinstance(node, VarNode):
             return self.visit_var(node)
-        elif isinstance(node, NumNode):
-            return node.expr_type
         elif isinstance(node, FuncCallNode):
             return self.visit_func_call(node)
         else:
@@ -275,7 +279,7 @@ class SemanticAnalyzer:
         
         # Operadores aritméticos: +, -, *, /, %
         if node.op in ['+', '-', '*', '/', '%']:
-            if left_type not in ['int', 'float'] or right_type not in ['int', 'float']:
+            if left_type not in ['int', 'float', 'unknown'] or right_type not in ['int', 'float', 'unknown']:
                 self.add_error(f"Operador '{node.op}' requiere operandos numéricos, "
                              f"se encontró '{left_type}' y '{right_type}'")
                 return 'unknown'
@@ -286,7 +290,7 @@ class SemanticAnalyzer:
         
         # Operadores relacionales: <, >, <=, >=, ==, !=
         elif node.op in ['<', '>', '<=', '>=', '==', '!=']:
-            if left_type not in ['int', 'float'] or right_type not in ['int', 'float']:
+            if left_type not in ['int', 'float', 'unknown'] or right_type not in ['int', 'float', 'unknown']:
                 self.add_error(f"Operador '{node.op}' requiere operandos numéricos, "
                              f"se encontró '{left_type}' y '{right_type}'")
                 return 'unknown'
@@ -311,7 +315,7 @@ class SemanticAnalyzer:
             node.expr_type = 'bool'
             return 'bool'
         elif node.op == '-':
-            if expr_type not in ['int', 'float']:
+            if expr_type not in ['int', 'float', 'unknown']:
                 self.add_error(f"Operador '-' unario requiere operando numérico, se encontró '{expr_type}'")
                 return 'unknown'
             node.expr_type = expr_type

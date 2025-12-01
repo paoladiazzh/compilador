@@ -84,6 +84,28 @@ class Lexer:
             matched = False 
 
             # -----------------------------
+            # Números (enteros y flotantes) - PRIMERO para capturar el punto
+            # -----------------------------
+            estado = self.afd_num.estado_inicial
+            start = pos
+            temp_pos = pos
+            while temp_pos < n:
+                siguiente = self.afd_num.mover(estado, texto[temp_pos])
+                if siguiente is None:
+                    break
+                estado = siguiente
+                temp_pos += 1
+            if self.afd_num.es_aceptacion(estado):
+                lex = texto[start:temp_pos]
+                # Validar que no haya letras pegadas después de un número
+                if temp_pos < n and (texto[temp_pos].isalpha() or texto[temp_pos] == '_'):
+                    raise LexerError(f"Lexema inválido '{texto[start:temp_pos+1]}'")
+                tokens.append(("NUM", lex))
+                pos = temp_pos
+                matched = True
+                continue
+
+            # -----------------------------
             # Operadores de dos caracteres
             # -----------------------------
             dos_char_ops = {"==": "OP_EQ", "!=": "OP_NEQ", "<=": "OP_LE", ">=": "OP_GE", "&&": "OP_AND", "||": "OP_OR"}
@@ -138,31 +160,10 @@ class Lexer:
                 continue
 
             # -----------------------------
-            # Números
-            # -----------------------------
-            estado = self.afd_num.estado_inicial
-            start = pos
-            while pos < n:
-                siguiente = self.afd_num.mover(estado, texto[pos])
-                if siguiente is None:
-                    break
-                estado = siguiente
-                pos += 1
-            if self.afd_num.es_aceptacion(estado):
-                lex = texto[start:pos]
-                # Validar que no haya letras pegadas después de un número
-                if pos < n and texto[pos].isalpha():
-                    raise LexerError(f"Lexema inválido '{texto[start:pos+1]}'")
-                tokens.append(("NUM", lex))
-                matched = True
-                continue
-
-            # -----------------------------
             # Si no se reconoció ningún token
             # -----------------------------
             if not matched:
                 raise LexerError(f"Carácter inesperado: {texto[pos]}")
-                pos += 1  # Esto normalmente no se alcanza porque raise termina el programa
 
         return tokens
 

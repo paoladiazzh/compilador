@@ -81,7 +81,7 @@ Parser (LL(1) Estricto)
 │   ├── tipo()          # TIPO → int | float | void
 │   └── parametros()    # Parámetros de funciones
 │
-├── Declaraciones Locales (NUEVO)
+├── Declaraciones Locales
 │   ├── decllocal()          # DECLLOCAL → TIPO id DECLLOCAL' puntoycoma
 │   ├── decllocal_prima()    # Con/sin inicialización
 │   └── decllocal_dobleprima() # Múltiples variables
@@ -102,7 +102,7 @@ Parser (LL(1) Estricto)
     ├── expradit()          # Expresiones aditivas
     ├── term()              # Términos multiplicativos
     ├── factor()            # Factores (números, IDs, llamadas)
-    └── factor_prima()      # Asignación, llamadas, o ε (NUEVO)
+    └── factor_prima()      # Asignación, llamadas, o ε
 ```
 
 ## Uso
@@ -120,10 +120,24 @@ proyecto/
     └── README.md
 ```
 
-### Ejecutar el parser
+### Ejecutar el parser (versión original - solo validación)
 
 ```bash
-python parser.py <archivo_fuente.src>
+python parser/parser.py 
+```
+
+### Ejecutar el compilador completo (con AST y análisis semántico)
+
+Para análisis completo incluyendo construcción de AST y validaciones semánticas:
+
+```bash
+python semantic/semantic_analyzer.py 
+```
+
+O usar el script integrador:
+
+```bash
+python compile.py 
 ```
 
 ### Ejemplos
@@ -156,11 +170,11 @@ python parser.py test_success1.src
 
 Salida esperada:
 ```
-=== Análisis Léxico Exitoso ===
+Análisis Léxico terminado
 Tokens generados: 62
 
-=== Iniciando Análisis Sintáctico (LL(1) Estricto) ===
-✓ Parsing completed successfully!
+Iniciando Análisis Sintáctico....
+Analizador sintáctico completado con éxito :) !
 ```
 
 #### Caso de éxito 2: Programa completo
@@ -219,12 +233,12 @@ void main() {
 
 Salida esperada:
 ```
-=== Análisis Léxico Exitoso ===
+Análisis Léxico terminado
 Tokens generados: 20
 
-=== Iniciando Análisis Sintáctico (LL(1) Estricto) ===
+Iniciando Análisis Sintáctico....
 Error de sintaxis: Se esperaba PUNTOYCOMA, se encontró INT
-✗ Parsing failed
+Analizador sintáctico fallido :(
 ```
 
 #### Caso de falla 2: Paréntesis sin cerrar
@@ -247,12 +261,12 @@ void main() {
 
 Salida esperada:
 ```
-=== Análisis Léxico Exitoso ===
+Análisis Léxico terminado
 Tokens generados: 41
 
-=== Iniciando Análisis Sintáctico (LL(1) Estricto) ===
+Iniciando Análisis Sintáctico....
 Error de sintaxis: Se esperaba RPAREN, se encontró LBRACE
-✗ Parsing failed
+Analizador sintáctico fallido :(
 ```
 
 ## Manejo de Errores
@@ -345,18 +359,19 @@ La decisión es LL(1) porque:
 
 ## Limitaciones Actuales
 
-- El parser realiza **análisis sintáctico puro** (no genera código ni construye árbol de sintaxis)
+- El parser realiza **análisis sintáctico puro** (no genera código ni construye árbol de sintaxis en esta versión)
 - No realiza análisis semántico (validación de tipos, alcance de variables, etc.)
 - Los errores se reportan en el primer problema encontrado (no hay recuperación de errores)
+- Para análisis semántico completo, usar [`semantic/semantic_analyzer.py`](../semantic/semantic_analyzer.py)
 
-## Próximos Pasos
+## Relación con el Analizador Semántico
 
-Para completar el compilador:
-1. **Construcción de AST** (Árbol de Sintaxis Abstracta)
-2. **Análisis semántico** (tabla de símbolos, chequeo de tipos)
-3. **Generación de código intermedio**
-4. **Optimización**
-5. **Generación de código objeto**
+Este parser es la base para el **Parser con AST** (`semantic/parser_ast.py`) que:
+
+1. Extiende este parser original
+2. Construye un Abstract Syntax Tree mientras parsea
+3. Retorna nodos del AST en lugar de solo validar
+4. Es utilizado por el analizador semántico para realizar validaciones avanzadas
 
 ## Validación LL(1)
 
@@ -375,6 +390,7 @@ Ver análisis completo en la documentación de FIRST y FOLLOW.
 - [Definición de Tokens](../specs/tokens_spec.md)
 - [Conjuntos FIRST y FOLLOW](../specs/first_and_follow_spec.md)
 - [Documentación del Lexer](../lexer/README.md)
+- [Documentación del Analizador Semántico](../semantic/README.md)
 
 ---
 

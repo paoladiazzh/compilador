@@ -1,0 +1,29 @@
+// CASO DE FALLA: Múltiples errores semánticos
+
+int suma(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    // Error 1: Variable no declarada
+    y = 10;
+    
+    // Error 2: Tipo incompatible en asignación
+    int x = 5;
+    x = 3.14;
+    
+    // Error 3: Función no declarada
+    int resultado = multiplicar(5, 3);
+    
+    // Error 4: Número incorrecto de argumentos
+    int s = suma(5);
+    
+    // Error 5: Tipo de retorno incompatible
+    return 3.14;
+}
+
+float promedio(int a, int b) {
+    // Error 6: Variable 'total' no declarada
+    total = a + b;
+    return total / 2.0;
+}

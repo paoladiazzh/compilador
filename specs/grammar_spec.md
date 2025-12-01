@@ -71,7 +71,7 @@
 
 **EXPRREL** → **EXPRADIT** **EXPRREL'**
 
-**EXPRREL'** → (``op_lt`` | ``op_gt`` | ``op_le`` | ``op_ge``) **EXPRADIT** **EXPRREL'** | ε
+**EXPRREL'** → (``op_lt`` | ``op_gt`` | ``op_le`` | ``op_ge``) **EXPRADIT** | ε
 
 **EXPRADIT** → **TERM** **EXPRADIT'**
 

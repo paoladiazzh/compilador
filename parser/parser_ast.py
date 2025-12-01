@@ -327,9 +327,9 @@ class ParserAST:
         return left
     
     def exprrel(self):
-        """EXPRREL → EXPRADIT ((< | > | <= | >=) EXPRADIT)*"""
+        """EXPRREL → EXPRADIT ((< | > | <= | >=) EXPRADIT)?"""
         left = self.expradit()
-        while self.current_type() in ["OP_LT", "OP_GT", "OP_LE", "OP_GE"]:
+        if self.current_type() in ["OP_LT", "OP_GT", "OP_LE", "OP_GE"]:
             op = self.current_value()
             self.advance()
             right = self.expradit()

@@ -1,0 +1,50 @@
+// CASO DE ÉXITO: Programa semánticamente correcto
+// Todas las validaciones pasan
+
+int factorial(int n) {
+    if (n <= 1) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+float promedio(int a, int b, int c) {
+    float suma;
+    suma = a + b + c;
+    return suma / 3.0;
+}
+
+int main() {
+    // Declaraciones locales
+    int num = 5;
+    int resultado;
+    float prom;
+    
+    // Llamada a función recursiva
+    resultado = factorial(num);
+    print(resultado);
+    
+    // Llamada con promoción de tipo
+    prom = promedio(10, 20, 30);
+    print(prom);
+    
+    // Expresiones válidas
+    if (resultado > 100) {
+        print(resultado);
+    }
+    
+    // Bucle while
+    int contador = 0;
+    while (contador < 10) {
+        contador = contador + 1;
+    }
+    
+    // Bucle for
+    int i;
+    for (i = 0; i < 5; i = i + 1) {
+        print(i);
+    }
+    
+    return 0;
+}

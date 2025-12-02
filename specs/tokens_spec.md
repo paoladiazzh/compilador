@@ -1,5 +1,5 @@
 
-# Definición formal de Tokens (Lenguaje miniC)
+# Definición formal de Tokens
 
 ## Palabras clave
 - `if`, `else`, `while`, `for`, `int`, `float`, `return`, `print`  

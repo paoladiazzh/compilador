@@ -2,7 +2,7 @@
 // Calcula el factorial de un número usando recursión
 
 int factorial(int n) {
-    if (n <= 1) {
+    if (n >= 10 || a < 0) {
         return 1;
     } else {
         return n * factorial(n - 1);

@@ -177,9 +177,10 @@ class NumNode(ASTNode):
     """Número literal: 42, 3.14"""
     def __init__(self, value):
         super().__init__()
-        self.value = str(value)  
+        self.value = value
         
-        if '.' in self.value:
+        value_str = str(value)  
+        if '.' in value_str:
             self.expr_type = 'float'
         else:
             self.expr_type = 'int'

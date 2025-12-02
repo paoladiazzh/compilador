@@ -3,14 +3,8 @@ import sys
 class LexerError(Exception):
     pass
 
-# -----------------------------
-# Palabras clave
-# -----------------------------
 KEYWORDS = {k.lower(): k for k in ["IF", "ELSE", "WHILE", "FOR", "INT", "FLOAT", "RETURN", "PRINT", "VOID"]}
 
-# -----------------------------
-# AFD básico
-# -----------------------------
 class AFD:
     def __init__(self, estados, transiciones, estado_inicial, estados_aceptacion):
         self.estados = estados
@@ -24,17 +18,12 @@ class AFD:
     def es_aceptacion(self, estado):
         return estado in self.estados_aceptacion
 
-# -----------------------------
-# Lexer
-# -----------------------------
 class Lexer:
     def __init__(self):
-        # AFD para identificadores
         trans_id_q0 = {c: "q1" for c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"}
         trans_id_q1 = {c: "q1" for c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"}
         self.afd_id = AFD(["q0", "q1"], {"q0": trans_id_q0, "q1": trans_id_q1}, "q0", ["q1"])
 
-        # AFD para números
         trans_num_q0 = {c: "q1" for c in "0123456789"}
         trans_num_q1 = {c: "q1" for c in "0123456789"}
         trans_num_q1["."] = "q2"
@@ -42,9 +31,6 @@ class Lexer:
         trans_num_q3 = {c: "q3" for c in "0123456789"}
         self.afd_num = AFD(["q0", "q1", "q2", "q3"], {"q0": trans_num_q0, "q1": trans_num_q1, "q2": trans_num_q2, "q3": trans_num_q3}, "q0", ["q1", "q3"])
 
-    # -----------------------------
-    # Limpieza
-    # -----------------------------
     def limpiar_codigo(self, texto):
         result = ""
         i = 0
@@ -70,9 +56,6 @@ class Lexer:
                 i += 1
         return result
 
-    # -----------------------------
-    # Tokenización 
-    # -----------------------------
     def tokenize(self, texto):
         texto = self.limpiar_codigo(texto)
         tokens = []
@@ -83,9 +66,6 @@ class Lexer:
             c = texto[pos]
             matched = False 
 
-            # -----------------------------
-            # Números (enteros y flotantes) - PRIMERO para capturar el punto
-            # -----------------------------
             estado = self.afd_num.estado_inicial
             start = pos
             temp_pos = pos
@@ -97,7 +77,6 @@ class Lexer:
                 temp_pos += 1
             if self.afd_num.es_aceptacion(estado):
                 lex = texto[start:temp_pos]
-                # Validar que no haya letras pegadas después de un número
                 if temp_pos < n and (texto[temp_pos].isalpha() or texto[temp_pos] == '_'):
                     raise LexerError(f"Lexema inválido '{texto[start:temp_pos+1]}'")
                 tokens.append(("NUM", lex))
@@ -105,9 +84,6 @@ class Lexer:
                 matched = True
                 continue
 
-            # -----------------------------
-            # Operadores de dos caracteres
-            # -----------------------------
             dos_char_ops = {"==": "OP_EQ", "!=": "OP_NEQ", "<=": "OP_LE", ">=": "OP_GE", "&&": "OP_AND", "||": "OP_OR"}
             if pos + 1 < n and texto[pos:pos+2] in dos_char_ops:
                 tokens.append((dos_char_ops[texto[pos:pos+2]], texto[pos:pos+2]))
@@ -115,9 +91,6 @@ class Lexer:
                 matched = True
                 continue
 
-            # -----------------------------
-            # Operadores de un carácter y delimitadores
-            # -----------------------------
             uno_char_ops = {"+": "OP_SUMA", "-": "OP_RESTA", "*": "OP_MUL", "/": "OP_DIV", "%": "OP_MOD",
                             "=": "ASIGNACION", "!": "OP_NOT", "<": "OP_LT", ">": "OP_GT",
                             "(": "LPAREN", ")": "RPAREN", "{": "LBRACE", "}": "RBRACE", ";": "PUNTOYCOMA", ",": "COMA"}
@@ -127,9 +100,6 @@ class Lexer:
                 matched = True
                 continue
 
-            # -----------------------------
-            # Identificadores y palabras clave
-            # -----------------------------
             estado = self.afd_id.estado_inicial
             start = pos
             while pos < n:
@@ -151,9 +121,7 @@ class Lexer:
                         break
 
                 if palabra_reservada:
-                    # Emitimos solo la palabra reservada
                     tokens.append((KEYWORDS[palabra_reservada], lex[:len(palabra_reservada)]))
-                    # Recolocamos pos justo después de la palabra reservada
                     pos = start + len(palabra_reservada)
                 else:
                     tokens.append(("ID", lex))
@@ -161,18 +129,11 @@ class Lexer:
                 matched = True
                 continue
 
-
-            # -----------------------------
-            # Si no se reconoció ningún token
-            # -----------------------------
             if not matched:
                 raise LexerError(f"Carácter inesperado: {texto[pos]}")
 
         return tokens
 
-# -----------------------------
-# Funciones auxiliares
-# -----------------------------
 def format_tokens(tokens):
     return "\n".join(f"<{t[0]}, \"{t[1]}\">" for t in tokens)
 

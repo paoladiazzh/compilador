@@ -11,8 +11,7 @@ from parser_ast import ParserAST
 from semantic_analyzer import SemanticAnalyzer, SemanticError
 
 
-def print_separator(title="", char="="):
-    """Imprime un separador visual"""
+def print_separator(title="", char="-"):
     width = 80
     if title:
         padding = (width - len(title) - 2) // 2
@@ -22,126 +21,96 @@ def print_separator(title="", char="="):
 
 
 def compile_file(filepath, verbose=False):
-    """
-    Compila un archivo fuente miniC
-    
-    Args:
-        filepath: Ruta al archivo fuente
-        verbose: Si True, muestra información detallada
-    
-    Returns:
-        True si la compilación fue exitosa, False en caso contrario
-    """
-    
+    """Ejecuta el proceso de compilación completo"""
+
     try:
-        # Leer archivo fuente
         with open(filepath, "r", encoding="utf-8") as f:
             source_code = f.read()
-        
-        print_separator("COMPILADOR MINIC", "=")
+
         print(f"Archivo: {filepath}")
         print(f"Tamaño: {len(source_code)} caracteres\n")
-        
-        # ==================== FASE 1: ANÁLISIS LÉXICO ====================
-        print_separator("FASE 1: ANÁLISIS LÉXICO", "-")
-        
+
+        # --- FASE 1: ANÁLISIS LÉXICO ---
+        print_separator("FASE 1: ANÁLISIS LÉXICO")
+
         lexer = Lexer()
         tokens = lexer.tokenize(source_code)
-        
-        print(f"✓ Análisis léxico completado")
-        print(f"  Tokens generados: {len(tokens)}")
-        
+
+        print("Análisis léxico completado")
+        print(f"Tokens generados: {len(tokens)}")
+
         if verbose:
-            print("\n  Primeros 10 tokens:")
+            print("\nPrimeros 10 tokens:")
             for i, token in enumerate(tokens[:10]):
-                print(f"    {i+1}. <{token[0]}, \"{token[1]}\">")
+                print(f"  {i+1}. <{token[0]}, \"{token[1]}\">")
             if len(tokens) > 10:
-                print(f"    ... y {len(tokens) - 10} más")
-        
-        # ==================== FASE 2: ANÁLISIS SINTÁCTICO ====================
-        print_separator("FASE 2: ANÁLISIS SINTÁCTICO", "-")
-        
+                print(f"  ... y {len(tokens) - 10} más")
+
+        # --- FASE 2: ANÁLISIS SINTÁCTICO ---
+        print_separator("FASE 2: ANÁLISIS SINTÁCTICO")
+
         parser = ParserAST(tokens)
         ast = parser.parse()
-        
+
         if not ast:
-            print("✗ Error en el análisis sintáctico")
+            print("Error en el análisis sintáctico")
             return False
-        
-        print("✓ Análisis sintáctico completado")
-        print(f"  AST construido exitosamente")
-        
+
+        print("Análisis sintáctico completado")
+        print("AST generado correctamente")
+
         if verbose:
-            print(f"\n  Estructura del AST:")
-            print(f"    {ast}")
-            print(f"    Declaraciones: {len(ast.declarations)}")
-        
-        # ==================== FASE 3: ANÁLISIS SEMÁNTICO ====================
-        print_separator("FASE 3: ANÁLISIS SEMÁNTICO", "-")
-        
+            print("\nEstructura del AST:")
+            print(f"  {ast}")
+            print(f"  Declaraciones: {len(ast.declarations)}")
+
+        # --- FASE 3: ANÁLISIS SEMÁNTICO ---
+        print_separator("FASE 3: ANÁLISIS SEMÁNTICO")
+
         analyzer = SemanticAnalyzer()
         success = analyzer.analyze(ast)
-        
-        # Mostrar tabla de símbolos
-        print("\n" + analyzer.symbol_table.get_table_representation())
-        
-        # Mostrar resultados del análisis
+
+        print("\nTABLA DE SÍMBOLOS\n")
+        print(analyzer.symbol_table.get_table_representation())
+
         if success:
-            print("\n✓ Análisis semántico completado sin errores")
-            print_separator("COMPILACIÓN EXITOSA", "=")
-            print("✓ El programa es correcto léxica, sintáctica y semánticamente")
+            print("\nAnálisis semántico completado sin errores")
+            print_separator("COMPILACIÓN EXITOSA", "-")
+            print("El programa pasó todas las fases correctamente")
             return True
         else:
             print("\n" + analyzer.get_errors_report())
-            print_separator("COMPILACIÓN FALLIDA", "=")
-            print(f"✗ Se encontraron {len(analyzer.errors)} error(es) semántico(s)")
+            print_separator("COMPILACIÓN FALLIDA", "-")
+            print(f"Errores semánticos: {len(analyzer.errors)}")
             return False
-    
+
     except LexerError as e:
-        print_separator("ERROR LÉXICO", "=")
-        print(f"✗ {e}")
+        print_separator("ERROR LÉXICO", "-")
+        print(str(e))
         return False
-    
+
     except FileNotFoundError:
-        print_separator("ERROR DE ARCHIVO", "=")
-        print(f"✗ No se encontró el archivo: {filepath}")
+        print_separator("ERROR DE ARCHIVO", "-")
+        print(f"No se encontró el archivo: {filepath}")
         return False
-    
+
     except Exception as e:
-        print_separator("ERROR INESPERADO", "=")
-        print(f"✗ {e}")
+        print_separator("ERROR INESPERADO", "-")
+        print(str(e))
         import traceback
         traceback.print_exc()
         return False
 
 
 def main():
-    """Función principal"""
-    
-    # Mostrar banner
-    print("""
-╔══════════════════════════════════════════════════════════════╗
-║                    COMPILADOR MINIC                          ║
-║                                                              ║
-║  Fases: Léxico → Sintáctico → Semántico                     ║
-╚══════════════════════════════════════════════════════════════╝
-    """)
-    
-    # Verificar argumentos
     if len(sys.argv) < 2:
-        print("Uso: python compile.py <archivo_fuente.src> [--verbose]")
-        print("\nEjemplos:")
-        print("  python compile.py semantic/test_success.src")
-        print("  python compile.py semantic/test_errors.src --verbose")
+        print("Uso: python compile.py <archivo.src> [--verbose]")
         sys.exit(1)
-    
+
     filepath = sys.argv[1]
     verbose = "--verbose" in sys.argv or "-v" in sys.argv
-    
-    # Compilar
+
     success = compile_file(filepath, verbose)
-    
-    # Código de salida
     sys.exit(0 if success else 1)
 
 

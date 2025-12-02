@@ -1,13 +1,6 @@
-#!/usr/bin/env python3
-"""
-Script integrador del compilador miniC
-Ejecuta todas las fases: Léxico, Sintáctico y Semántico
-"""
-
 import sys
 import os
 
-# Añadir directorios al path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(current_dir, 'lexer'))
 sys.path.insert(0, os.path.join(current_dir, 'parser'))

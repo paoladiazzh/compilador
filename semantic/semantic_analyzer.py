@@ -257,6 +257,8 @@ class SemanticAnalyzer:
         elif isinstance(node, EmptyExprNode):
             return 'void'
         elif isinstance(node, NumNode):
+            # CORRECCIÓN CRÍTICA: Los números literales no necesitan declaración
+            # Solo retornar su tipo directamente
             return node.expr_type
         elif isinstance(node, BinaryOpNode):
             return self.visit_binary_op(node)

@@ -151,13 +151,16 @@ class Lexer:
                         break
 
                 if palabra_reservada:
+                    # Emitimos solo la palabra reservada
                     tokens.append((KEYWORDS[palabra_reservada], lex[:len(palabra_reservada)]))
-                    if len(lex) > len(palabra_reservada):
-                        tokens.append(("ID", lex[len(palabra_reservada):]))
+                    # Recolocamos pos justo después de la palabra reservada
+                    pos = start + len(palabra_reservada)
                 else:
                     tokens.append(("ID", lex))
+
                 matched = True
                 continue
+
 
             # -----------------------------
             # Si no se reconoció ningún token
